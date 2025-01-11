@@ -7,6 +7,7 @@ public class defines {
 	public static final double G=9.80665;
 	public static final double AIR_DENSITY=1.204;
 	public static final int GROUND_LEVEL=200;
+	public static final int SELECT_WIDTH=300;
 	
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final double SCREEN_WIDTH=screenSize.getWidth();
