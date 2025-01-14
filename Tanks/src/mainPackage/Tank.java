@@ -50,7 +50,8 @@ public class Tank {
 	}
 
 	public void move(int dir) {
-		
+		int step=10;
+		pos.x+=step*dir;
 	}
 	
 	public boolean checkFuel() {

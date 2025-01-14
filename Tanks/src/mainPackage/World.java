@@ -8,10 +8,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Graphics;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class World extends JFrame {
 
@@ -19,7 +25,9 @@ public class World extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
+	
 	int turn=0;
+	boolean runGame=true;
 	Tank Player1=new Tank();
 	Tank Player2=new Tank();
 
@@ -43,6 +51,12 @@ public class World extends JFrame {
 	 * Create the frame.
 	 */
 	public World() {
+		Random r = new Random();
+		Player1=new Tank(new double2(r.nextInt(100),defines.SCREEN_HEIGHT-defines.GROUND_LEVEL-42), new double2(150,75),5);
+		Player2=new Tank(new double2(defines.SCREEN_WIDTH-defines.SELECT_WIDTH-r.nextInt(100)-150,defines.SCREEN_HEIGHT-defines.GROUND_LEVEL-42), new double2(150,75),5);
+
+
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(0, 0, (int)defines.SCREEN_WIDTH, (int)defines.SCREEN_HEIGHT);
 		contentPane = new JPanel();
@@ -57,6 +71,11 @@ public class World extends JFrame {
 		panel.setBounds((int)defines.SCREEN_WIDTH-defines.SELECT_WIDTH, 0, defines.SELECT_WIDTH, (int)defines.SCREEN_HEIGHT);
 		contentPane.add(panel);
 		panel.setLayout(null);
+		
+		JLabel lblNewLabel_2 = new JLabel("Turn 1");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNewLabel_2.setBounds(75, 80, 75, 50);
+		panel.add(lblNewLabel_2);
 		
 		JLabel lblNewLabel = new JLabel("Angle:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -109,7 +128,7 @@ public class World extends JFrame {
 		panel.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Shoot");
-		btnNewButton_1.addActionListener(new ActionListener() {
+		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(turn%2==0) {
 					Player1.shoot(Double.parseDouble(textField.getText()),Double.parseDouble(textField_1.getText()));
@@ -123,15 +142,43 @@ public class World extends JFrame {
 		btnNewButton_2.setBounds(33, 500, 233, 75);
 		panel.add(btnNewButton_2);
 		
+	
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(0, 128, 0));
 		panel_1.setBounds(0, (int)defines.SCREEN_HEIGHT-defines.GROUND_LEVEL, (int)defines.SCREEN_WIDTH-defines.SELECT_WIDTH, defines.GROUND_LEVEL);
 		contentPane.add(panel_1);
 		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(0, 191, 255));
+		panel_2.setBounds(0, 0, (int)(defines.SCREEN_WIDTH-defines.SELECT_WIDTH), (int)(defines.SCREEN_HEIGHT-defines.GROUND_LEVEL));
+		contentPane.add(panel_2);
 		
+		Timer timer=new Timer();
+		TimerTask task=new TimerTask() {
+			@Override
+			public void run() {
+				
+				if(runGame) {
+					
+					panel_2.repaint();
+					System.out.println(Player1.getPos().x);
+				}
+			}
+		};
+		timer.scheduleAtFixedRate(task, 0, 1000/60);
 		
 		
 	}
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.BLACK);
+		g.fillRect((int)Player1.getPos().x, (int)Player1.getPos().y, (int)Player1.getSize().x, (int)Player1.getSize().y);
+		g.fillRect((int)Player2.getPos().x, (int)Player2.getPos().y, (int)Player2.getSize().x, (int)Player2.getSize().y);
+		
+	} 
+	
 	public void run() {
 		
 	}
