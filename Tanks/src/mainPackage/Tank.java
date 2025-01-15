@@ -5,9 +5,9 @@ public class Tank {
 	private double2 pos;
 	private double2 size;
 	private int fuel;
-	
+		
 	public Tank() {
-		setFuel(0);
+		setFuel(defines.MAX_FUEL);
 		setPos(new double2(0,0));
 		setSize(new double2(100,100));
 
@@ -34,24 +34,25 @@ public class Tank {
 		this.size = size;
 	}
 
-	public void shoot(double angle, double force) {
+	public Cannonball shoot(double angle, double force) {
 		angle=Math.PI/180*angle;
-		Cannonball ball=new Cannonball(pos,3,new double2(0,0),new double2(force/3*Math.cos(angle),force/3*Math.sin(angle)),50);
-		while(!checkCollision(ball) || !ball.hasLanded()) {
-			ball.updatePos();
-		}
+		force=force*defines.MAX_FORCE/100;
+		Cannonball ball=new Cannonball(pos,defines.BALL_MASS,new double2(force/3*Math.cos(angle),-1*force/3*Math.sin(angle)),new double2(0,defines.G),defines.BALL_R);
+		return ball;
 	}
 	
 	public boolean checkCollision(Cannonball ball) {
-		return (pos.x + size.x >= ball.getPos().x - ball.getPos().y &&     // r1 right edge past r2 left
-				  pos.x <= ball.getPos().x - ball.getPos().y + ball.getRadius() &&       // r1 left edge past r2 right
-				  pos.y + size.y >= ball.getPos().y - ball.getPos().y &&       // r1 top edge past r2 bottom
-				  pos.y <= ball.getPos().y - ball.getPos().y + ball.getRadius());        // r1 bottom edge past r2 top
+		return (pos.x + size.x >= ball.getPos().x - ball.getRadius() &&     // r1 right edge past r2 left
+				  pos.x <= ball.getPos().x + ball.getRadius() &&       // r1 left edge past r2 right
+				  pos.y + size.y >= ball.getPos().y - ball.getRadius() &&       // r1 top edge past r2 bottom
+				  pos.y <= ball.getPos().y + ball.getRadius());        // r1 bottom edge past r2 top
 	}
 
 	public void move(int dir) {
-		int step=10;
+		int step=defines.TANK_STEP;
+		
 		pos.x+=step*dir;
+		fuel--;
 	}
 	
 	public boolean checkFuel() {

@@ -13,17 +13,13 @@ public class double2 {
 		this.y=y;
 	} 
 	
-	public double2 add(double2 second) {
-		double2 sum=new double2();
-		sum.x=x+second.x;
-		sum.y=y+second.y;
-		return sum;
+	public void add(double2 second) {
+		x=x+second.x;
+		y=y+second.y;
 	}
-	public double2 mul(double2 second) {
-		double2 sum=new double2();
-		sum.x=x*second.x;
-		sum.y=y*second.y;
-		return sum;
+	public void mul(double2 second) {
+		x=x*second.x;
+		y=y*second.y;
 	}
 	
 	public double dis() {
