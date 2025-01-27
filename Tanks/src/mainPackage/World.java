@@ -219,29 +219,32 @@ public class World extends JFrame {
 		JButton btnNewButton_2 = new JButton("Shoot");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(turn%2==0) {
-					drawPanel.Player1.setPos(new double2(drawPanel.Player1.getPos().x+drawPanel.Player1.getSize().x,drawPanel.Player1.getPos().y));
-					drawPanel.ball=drawPanel.Player1.shoot(Double.parseDouble(textField.getText()),Double.parseDouble(textField_1.getText()));
-					drawPanel.Player1.setPos(new double2(drawPanel.Player1.getPos().x-drawPanel.Player1.getSize().x,drawPanel.Player1.getPos().y));
-					
-					turn++;
-					drawPanel.Player1.setFuel(defines.MAX_FUEL);
-
-					lblNewLabel_2.setText("Player 2");
+				double angle=Double.parseDouble(textField.getText());
+				double force=Double.parseDouble(textField_1.getText());
+				if(angle>=0 && angle <= 90 && force>0 && force<=100) {
+					if(turn%2==0) {
+						drawPanel.Player1.setPos(new double2(drawPanel.Player1.getPos().x+drawPanel.Player1.getSize().x,drawPanel.Player1.getPos().y));
+						drawPanel.ball=drawPanel.Player1.shoot(angle,force);
+						drawPanel.Player1.setPos(new double2(drawPanel.Player1.getPos().x-drawPanel.Player1.getSize().x,drawPanel.Player1.getPos().y));
+						
+						
+						drawPanel.Player1.setFuel(defines.MAX_FUEL);
+	
+						lblNewLabel_2.setText("Player 2");
+						
+					}else {
+						drawPanel.ball=drawPanel.Player2.shoot(angle*-1,force*-1);
+						drawPanel.Player2.setPos(new double2(drawPanel.Player2.getPos().x,drawPanel.Player2.getPos().y));
+						
+						drawPanel.Player2.setFuel(defines.MAX_FUEL);
+						
+						lblNewLabel_2.setText("Player 1");
+					}
 					textField.setText("0");
 					textField_1.setText("0");
-				}else {
-					drawPanel.ball=drawPanel.Player2.shoot(Double.parseDouble(textField.getText())*-1,Double.parseDouble(textField_1.getText())*-1);
-					drawPanel.Player2.setPos(new double2(drawPanel.Player2.getPos().x,drawPanel.Player2.getPos().y));
-
 					turn++;
-					drawPanel.Player2.setFuel(defines.MAX_FUEL);
-
-					lblNewLabel_2.setText("Player 1");
-					textField.setText("0");
-					textField_1.setText("0");
+					progressBar.setValue(drawPanel.Player1.getFuel()+drawPanel.Player2.getFuel()-defines.MAX_FUEL);
 				}
-				progressBar.setValue(drawPanel.Player1.getFuel()+drawPanel.Player2.getFuel()-defines.MAX_FUEL);
 			}
 		});
 
